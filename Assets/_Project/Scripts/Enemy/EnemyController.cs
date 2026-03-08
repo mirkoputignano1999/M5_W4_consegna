@@ -7,47 +7,32 @@ public class EnemyController : NavMeshMover
     private BaseEnemyState _currentState;
 
     [SerializeField] private Transform _player;
-    //[SerializeField] private float _chaseRange = 10f;
-    [SerializeField] private float _attackRange = 2f;
 
     [SerializeField] private float _viewDistance = 10f;
     [SerializeField] private float _viewAngle = 60f;
+    //[SerializeField] private float _chaseRange = 10f;
+    [SerializeField] private float _attackRange = 2f;
     [SerializeField] private LayerMask _obstacleMask;
+
+    [SerializeField] private Transform[] _waypoints;
+    private int _currentWaypoint;
+
+    private Vector3 _startPosition;
 
     protected override void Awake()
     {
         base.Awake();
-        ChangeState(new EnemyIdleState(this));
-    }
+        _startPosition = transform.position;
 
+        if (_waypoints != null && _waypoints.Length > 0)
+            ChangeState(new EnemyPatrolState(this));
+        else
+            ChangeState(new EnemyIdleState(this));
+    }
     protected override void Update()
     {
         base.Update();
         _currentState?.Update();
-    }
-
-    public bool CanSeePlayer()
-    {
-        Vector3 directionToPlayer = (_player.position - transform.position);
-
-        if (directionToPlayer.magnitude > _viewDistance)
-            return false;
-
-        directionToPlayer.Normalize();
-
-        float dot = Vector3.Dot(transform.forward, directionToPlayer);
-        float angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
-
-        if (angle > _viewAngle * 0.5f)
-            return false;
-
-        if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, _viewDistance, _obstacleMask))
-        {
-            if (hit.transform != _player)
-                return false;
-        }
-
-        return true;
     }
 
     public void ChangeState(BaseEnemyState newState)
@@ -57,17 +42,65 @@ public class EnemyController : NavMeshMover
         _currentState.Enter();
     }
 
+    public bool CanSeePlayer()
+    {
+        Vector3 dir = (_player.position - transform.position);
+
+        if (dir.magnitude > _viewDistance)
+            return false;
+
+        dir.Normalize();
+
+        float dot = Vector3.Dot(transform.forward, dir);
+        float angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
+
+        if (angle > _viewAngle * 0.5f)
+            return false;
+
+        if (Physics.Raycast(transform.position + Vector3.up, dir, out RaycastHit hit, _viewDistance, _obstacleMask))
+        {
+            if (hit.transform != _player)
+                return false;
+        }
+
+        return true;
+    }
+
+    public void MoveToNextWaypoint()
+    {
+        if (_waypoints.Length == 0)
+            return;
+
+        MoveTo(_waypoints[_currentWaypoint].position);
+    }
+
+    public bool ReachedDestination()
+    {
+        return !_agent.pathPending && _agent.remainingDistance < 0.3f;
+    }
+
+    public void NextWaypoint()
+    {
+        if (_waypoints == null || _waypoints.Length == 0)
+            return;
+
+        _currentWaypoint = (_currentWaypoint + 1) % _waypoints.Length;
+    }
+
     public void ChasePlayer()
     {
         MoveTo(_player.position);
     }
 
-    //public bool PlayerInRange()
-    //{
-    //    return Vector3.Distance(transform.position, _player.position) <= _chaseRange;
-    //}
+    public Vector3 StartPosition => _startPosition;
 
-    void OnDrawGizmosSelected()
+
+//public bool PlayerInRange()
+//{
+//    return Vector3.Distance(transform.position, _player.position) <= _chaseRange;
+//}
+
+void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, _viewDistance);

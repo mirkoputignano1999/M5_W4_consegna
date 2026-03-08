@@ -4,12 +4,7 @@ using UnityEngine;
 
 public class EnemyIdleState : BaseEnemyState
 {
-    public EnemyIdleState(EnemyController enemy) : base(enemy) { }
-
-    public override void Enter()
-    {
-        Debug.Log("Enemy Enter Idle");
-    }
+    public EnemyIdleState(EnemyController enemy) : base(enemy) {}
 
     public override void Update()
     {

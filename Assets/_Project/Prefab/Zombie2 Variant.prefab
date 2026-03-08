@@ -98,7 +98,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3490026887102114920, guid: e0a2ae8d8ae1c1f4b83e337da0b6f6b4,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 827801137610896427}
+      addedObject: {fileID: 3059763608008739093}
   m_SourcePrefab: {fileID: 100100000, guid: e0a2ae8d8ae1c1f4b83e337da0b6f6b4, type: 3}
 --- !u!1 &2072593454252497548 stripped
 GameObject:
@@ -151,7 +151,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &827801137610896427
+--- !u!114 &3059763608008739093
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -160,7 +160,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2072593454252497548}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b4eff2532b4e204d878d29b7373aed0, type: 3}
+  m_Script: {fileID: 11500000, guid: ba7090d8e8de13e46a5fbd0716b15dbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _target: {fileID: 0}
+  _rotationSpeed: 10
+  _stoppingDistance: 0.1
+  _player: {fileID: 0}
+  _attackRange: 2
+  _viewDistance: 20
+  _viewAngle: 60
+  _obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
