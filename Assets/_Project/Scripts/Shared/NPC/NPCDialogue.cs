@@ -1,0 +1,20 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class NPCDialogue : MonoBehaviour
+{
+    [TextArea]
+    [SerializeField] private string _dialogueText;
+
+    public System.Action OnDialogueFinished;
+
+    public virtual void StartDialogue()
+    {
+        DialogueUI.Instance.ShowDialogue(_dialogueText);
+
+        InteractionUI.Instance.Hide();
+    }
+}
+
+
