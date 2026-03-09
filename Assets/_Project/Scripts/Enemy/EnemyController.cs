@@ -111,6 +111,9 @@ void OnDrawGizmosSelected()
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(transform.position, transform.position + left * _viewDistance);
         Gizmos.DrawLine(transform.position, transform.position + right * _viewDistance);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, _attackRange);
     }
 
     public bool PlayerInAttackRange()

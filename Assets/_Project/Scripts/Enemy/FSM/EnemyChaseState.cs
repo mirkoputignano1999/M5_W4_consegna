@@ -8,6 +8,12 @@ public class EnemyChaseState : BaseEnemyState
 
     public override void Update()
     {
+        if (_enemy.PlayerInAttackRange())
+        {
+            _enemy.ChangeState(new EnemyAttackState(_enemy));
+            return;
+        }
+
         if (_enemy.CanSeePlayer())
         {
             _enemy.ChasePlayer();

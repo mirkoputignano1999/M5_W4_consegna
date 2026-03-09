@@ -9,6 +9,8 @@ public class EnemyAttackState : BaseEnemyState
     public override void Enter()
     {
         Debug.Log("Enemy Attacking");
+
+        CheckpointManager.Instance.RespawnPlayer();
     }
 
     public override void Update()
